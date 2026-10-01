@@ -1,0 +1,281 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Simulateur de rachat de prêt immobilier</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#edf1f6;--cd:#fff;--tx:#0d2137;--mu:#586b80;--bd:#d6dfea;--ac:#0e2a47;--pt:#fff;--gd:#c8963e;--ok:#0f7b5a;--ko:#b8432b;--wa:#a86a0c;--hd:#e5ebf3;--tp:#0b2239;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#08131f;--cd:#102133;--tx:#e7eef6;--mu:#8fa3b8;--bd:#22364b;--ac:#e0b45f;--pt:#0a1b2c;--gd:#e0b45f;--ok:#43d19a;--ko:#ff8a6b;--wa:#f2b84b;--hd:#17293d;--tp:#0a1b2c}}
+:root[data-theme=dark]{--bg:#08131f;--cd:#102133;--tx:#e7eef6;--mu:#8fa3b8;--bd:#22364b;--ac:#e0b45f;--pt:#0a1b2c;--gd:#e0b45f;--ok:#43d19a;--ko:#ff8a6b;--wa:#f2b84b;--hd:#17293d;--tp:#0a1b2c}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 90px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Figtree,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+h1,h3,.vt,.kp b{font-family:'Bricolage Grotesque',Figtree,system-ui,sans-serif}
+.w{max-width:1180px;margin:auto;padding:0 20px}.top{background:var(--tp);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.ti{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 0 4px}
+h1{font-size:23px;font-weight:800;margin:0;line-height:1.1}h1 small{display:block;font:400 12.5px Figtree,sans-serif;color:var(--gd);margin-top:3px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:8px;padding:7px 12px}
+button:hover{border-color:var(--gd)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gd);outline-offset:1px}
+.top button{background:#ffffff14;border-color:#ffffff33;color:#fff}.top button:hover{background:#ffffff26}
+.top .pri,button.pri{background:var(--gd);color:#0b2239;border-color:var(--gd);font-weight:600}button.pri:hover{filter:brightness(1.08)}
+nav{display:flex;gap:2px;overflow-x:auto}nav button{background:none!important;border:0;border-bottom:3px solid transparent;border-radius:0;color:#ffffffb3;padding:10px 14px;white-space:nowrap}
+nav button.on{color:#fff;border-bottom-color:var(--gd);font-weight:600}
+main{max-width:1180px;margin:auto;padding:0 20px 48px}section{display:none;padding-top:18px}section.on{display:block}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.k{grid-template-columns:repeat(auto-fit,minmax(175px,1fr))}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:14px}.g .card{margin:0}
+h3{margin:0 0 10px;font-size:16px;font-weight:600}label{display:block;font-size:12.5px;color:var(--mu);margin-bottom:9px}
+input,select,textarea{display:block;width:100%;margin-top:3px;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 9px}
+input:disabled{opacity:.55}.ck{display:flex;gap:8px;align-items:center;color:var(--tx);font-size:14px}.ck input{width:auto;margin:0}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.r4{display:grid;grid-template-columns:1.4fr .8fr .8fr .8fr auto;gap:6px;align-items:end;margin-bottom:4px}
+.hero{background:var(--tp);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:14px;display:grid;gap:18px;grid-template-columns:1fr 1.2fr;align-items:center;border-left:8px solid var(--ok)}
+.hero.ko{border-left-color:var(--ko)}.hero.wa{border-left-color:var(--wa)}.vt{font-size:27px;font-weight:800;line-height:1.15}.hero p{margin:6px 0 0;color:#ffffffc9}
+.tk{position:relative;padding:6px 0}.tr{display:flex;height:14px;border-radius:7px;overflow:hidden}.tr .neg{background:var(--ko)}.tr .pos{background:var(--ok)}
+.mk{position:absolute;top:0;width:4px;height:26px;background:#fff;border-radius:2px;transform:translateX(-2px)}
+.tls{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#ffffffb8;margin-top:6px}.tls span:nth-child(2){color:#fff;font-weight:600;text-align:center}
+.kp{background:var(--cd);border:1px solid var(--bd);border-top:3px solid var(--gd);border-radius:10px;padding:12px 14px}.kp b{display:block;font-size:23px;font-weight:800;line-height:1.2}.kp small{color:var(--mu)}
+.ok{color:var(--ok)}.ko{color:var(--ko)}.wa{color:var(--wa)}.er{color:var(--ko)}
+.vd{border-radius:10px;padding:10px 14px;margin-bottom:14px;border:1px solid var(--wa);background:color-mix(in srgb,var(--wa) 12%,var(--cd))}
+.tw{overflow-x:auto;max-height:560px}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{background:var(--hd);position:sticky;top:0;font-weight:600}th:first-child,td:first-child{text-align:left}tr.pd td{color:var(--mu);background:var(--bg)}tr.hl td{background:color-mix(in srgb,var(--gd) 20%,var(--cd));font-weight:600}
+td input{margin:0;padding:4px 6px;text-align:right}.ch{height:270px;position:relative}.note{color:var(--mu);font-size:12.5px}
+.dz{border:2px dashed var(--bd)}.dz.over{border-color:var(--gd)}input[type=file]{padding:8px}.dz table{margin-top:8px}
+#tst{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:8px;display:none;z-index:9}
+#mod{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:9}#mod div{background:var(--cd);padding:16px;border-radius:12px;width:min(640px,100%)}#mod textarea{height:240px}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.r4{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<header class="top"><div class="w"><div class="ti"><h1>Rachat de prêt immobilier<small>Simulateur d'arbitrage : gain, point mort, alternatives</small></h1><div class="bar"><button data-act="burato">Cas Burato</button><button data-act="nouveau">Nouveau cas</button><button data-act="imp">Importer un PDF</button><button data-act="copyR">Copier le résumé</button><button class="pri" data-act="pdf">Rapport PDF</button><button data-act="theme" aria-label="Changer de thème">◐</button></div></div><nav id="nav"></nav></div></header>
+<main><section id="p_dat"></section><section id="p_res"></section><section id="p_sch"></section><section id="p_alt"></section><section id="p_rap"></section><section id="p_ctl"></section></main>
+<div id="tst"></div><div id="mod"><div><p>Sélectionnez et copiez (Ctrl+C) :</p><textarea readonly></textarea><button data-act="close">Fermer</button></div></div>
+<script>
+//ENGINE
+const D0={cap:535000,taux:4,duree:300,debut:'2019-10-01',rachat:'2026-12-31',rev:200000,emp:[{n:'M.',q:100,ao:.18,an:.15},{n:'Mme',q:100,ao:.18,an:.12}],baseAO:'init',baseAN:'init',iraOn:true,iraPct:3,iraMois:6,frais:1000,gar:5039,cour:0,aut:0,restit:2945,rq:'fin',fin:true,bar:[[5,10,2],[11,15,2.35],[16,20,2.75],[21,25,3]],dAuto:true,nd:213,tAuto:true,tMan:2.75,arr:false,actu:3,hor:0,nego:{t:3.4,f:500},tol:1,ex:{},ia:{},qs:['','','',''],rep:{dossier:'Rachat de prêt immobilier',clients:'M. et Mme BURATO',cabinet:'',conseiller:'',comm:'',obj:'Conserver la durée restante et baisser la mensualité'}};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const pm=(P,r,n)=>n<=0?0:r?P*r/(1-Math.pow(1+r,-n)):P/n;
+function addM(s,i){const[y,m,d]=s.split('-').map(Number),t=new Date(Date.UTC(y,m-1+i,1)),z=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth()+1,0)).getUTCDate();t.setUTCDate(Math.min(d,z));return t}
+const ymd=d=>d.toISOString().slice(0,10);
+const insF=(S,key,base,P)=>c=>S.emp.reduce((s,e)=>s+e.q/100*e[key]/100*(base=='init'?P:c)/12,0);
+function sched(P,t,n,start,ins,rnd){const r=t/1200,R=x=>rnd?Math.round(x*100)/100:x,p=R(pm(P,r,n));let c=P;const rows=[];
+for(let i=0;i<n;i++){const it=R(c*r);let m=p,cap=m-it;if(i==n-1&&rnd){cap=c;m=c+it}const a=ins(c);rows.push({i:i+1,d:addM(start,i),crd:c,m,it,cap,a,tot:m+a,end:Math.abs(c-cap)<1e-6?0:c-cap});c-=cap}return rows}
+function bareme(S,n){const y=Math.ceil(n/12),b=S.bar.find(x=>y>=x[0]&&y<=x[1]);return b?b[2]:null}
+const rateFor=(S,d)=>S.tAuto?bareme(S,d):S.tMan;
+function irr(f,up,T,rs,tr){let lo=-.01,hi=.05;for(let i=0;i<70;i++){const r=(lo+hi)/2;let v=up-T-rs*Math.pow(1+r,-tr);f.forEach((x,t)=>v+=x*Math.pow(1+r,-(t+1)));v>0?lo=r:hi=r}return(Math.pow(1+(lo+hi)/2,12)-1)*100}
+function scen(S,O,d,rate,o={}){
+const ira=o.ira??O.ira,costs=(o.fees??O.fees)+ira,rs=S.rq=='non'?0:(o.rs??S.restit),up=S.fin?0:costs,P=O.CRD+(S.fin?costs:0);
+const rows=sched(P,rate,d,O.start,insF(S,'an',S.baseAN,P),S.arr),T=Math.max(d,O.m),a=Math.pow(1+S.actu/100,1/12);
+let cO=0,cN=0,npv=-up+(S.rq=='rachat'?rs:0),si=0,sa=0;const g=[-costs+(S.rq=='rachat'?rs:0)];
+for(let t=1;t<=T;t++){const ro=t<=O.m?O.oldRows[t-1]:null,rn=t<=d?rows[t-1]:null,po=ro?ro.tot:0,pn=rn?rn.tot:0;cO+=po;cN+=pn;npv+=(po-pn)/Math.pow(a,t);if(rn){si+=rn.it;sa+=rn.a}
+g.push(cO+(ro?ro.end:0)-cN-(rn?rn.end:0)-up+(S.rq=='rachat'?rs:0)+(S.rq=='fin'&&t>=d?rs:0))}
+if(S.rq=='fin')npv+=rs/Math.pow(a,d);
+return{P,d,rate,rows,g,T,costs,up,rs,ira,si,sa,npv,tPM:g.findIndex(x=>x>=0),pmt:rows[0].m,ass:rows[0].a,tot:rows[0].tot,gainM:O.oldRows[0].tot-rows[0].tot,gainT:g[T],cost:cN+up-rs,teg:irr(rows.map(r=>r.tot),up,O.CRD,rs,S.rq=='rachat'?0:d)}}
+const num=x=>parseFloat(x)||0;
+function norm(R){const S=clone(R);['cap','taux','duree','rev','iraPct','iraMois','frais','gar','cour','aut','restit','nd','tMan','actu','hor'].forEach(k=>S[k]=num(R[k]));S.emp.forEach(e=>['q','ao','an'].forEach(k=>e[k]=num(e[k])));S.bar=S.bar.filter(b=>b.every(x=>x!=='')).map(b=>b.map(num));S.nego={t:num(R.nego.t),f:num(R.nego.f)};return S}
+function calc(R){const S=norm(R),I=m=>({err:m,info:1});
+if(!(S.cap>0&&S.duree>=1&&R.taux!==''&&R.debut&&R.rachat))return I('Renseignez le prêt actuel (capital, taux, durée, dates) et l\'offre de rachat dans l\'onglet Données, ou importez un PDF.');
+const old=sched(S.cap,S.taux,S.duree,S.debut,insF(S,'ao',S.baseAO,S.cap),S.arr),rd=new Date(S.rachat+'T00:00:00Z'),k=old.filter(r=>r.d<=rd).length,m=S.duree-k;
+if(m<1)return{err:'Le prêt actuel est déjà soldé à la date de rachat.'};
+if(!S.emp.length)return{err:'Ajoutez au moins un emprunteur.'};
+const CRD=k?old[k-1].end:S.cap,ira=S.iraOn?Math.min(S.iraPct/100*CRD,S.iraMois/12*S.taux/100*CRD):0,oldRows=old.slice(k);
+const O={S,old,k,m,CRD,ira,oldRows,fees:S.frais+S.gar+S.cour+S.aut,start:ymd(addM(S.debut,k))};
+O.cO=oldRows.reduce((s,r)=>s+r.tot,0);O.oI=oldRows.reduce((s,r)=>s+r.it,0);O.oA=oldRows.reduce((s,r)=>s+r.a,0);
+if(!S.dAuto&&!(S.nd>=1))return I('Saisissez la durée du nouveau prêt.');O.nd=S.dAuto?m:Math.round(S.nd);O.lk=bareme(S,O.nd);O.rate=S.tAuto&&O.lk!=null?O.lk:S.tMan;if(!(O.rate>0))return I('Aucun taux applicable à cette durée : complétez le barème ou saisissez le taux.');
+O.base=scen(S,O,O.nd,O.rate);O.teg0=irr(oldRows.map(r=>r.tot),0,CRD,0,0);return O}
+function constDur(S,O){for(let d=6;d<=O.m+240;d++){const r=rateFor(S,d);if(r==null)continue;const P=O.CRD+(S.fin?O.fees+O.ira:0);if(pm(P,r/1200,d)+insF(S,'an',S.baseAN,P)(P)<=O.oldRows[0].tot)return d}return null}
+//END
+const $=s=>document.querySelector(s),fmt=(x,d=2)=>isFinite(x)?x.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const eur=x=>fmt(x)+' €',e0=x=>fmt(x,0)+' €',pc=x=>fmt(x)+' %',fd=d=>d.toLocaleDateString('fr-FR',{month:'short',year:'numeric',timeZone:'UTC'}),cl=x=>x>0?'ok':x<0?'ko':'';
+let S=clone(D0),CUR,V={sch:'new'},C1,C2;
+const gv=k=>k.split('.').reduce((a,p)=>a?.[p],S)??'';
+const esc=x=>String(x??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const inp=(l,k,t='number',x='',id='')=>`<label>${l}<input ${id?`id="${id}"`:''} data-k="${k}" type="${t}" ${t=='number'?'step="any"':''} ${x} placeholder="${PH[k]||PH[k.replace(/\.\d+\./,'.i.')]||''}" value="${esc(gv(k))}"></label>`;
+const chk=(l,k)=>`<label class="ck"><input type="checkbox" data-k="${k}" ${gv(k)?'checked':''}>${l}</label>`;
+const sel=(l,k,o)=>`<label>${l}<select data-k="${k}">${o.map(([v,t])=>`<option value="${v}" ${gv(k)==v?'selected':''}>${t}</option>`).join('')}</select></label>`;
+const BS=[['init','Capital initial'],['crd','Capital restant dû']];
+function form(){$('#p_dat').innerHTML=impCard()+`<div class="g">
+<div class="card"><h3>Prêt actuel</h3>${inp('Capital initial (€)','cap')}<div class="r2">${inp('Taux hors assurance (%)','taux')}${inp('Durée (mois)','duree')}</div><div class="r2">${inp('1re échéance','debut','date')}${inp('Date de rachat','rachat','date')}</div>${inp('Revenus annuels du foyer (€)','rev')}</div>
+<div class="card"><h3>Emprunteurs et assurances</h3>${S.emp.map((e,i)=>`<div class="r4">${inp('Nom',`emp.${i}.n`,'text')}${inp('Quotité %',`emp.${i}.q`)}${inp('Ass. actuelle %',`emp.${i}.ao`)}${inp('Ass. nouvelle %',`emp.${i}.an`)}<button data-act="delE:${i}" title="Supprimer">✕</button></div>`).join('')}
+<button data-act="addE">+ Emprunteur</button><div class="r2" style="margin-top:10px">${sel('Assiette assurance actuelle','baseAO',BS)}${sel('Assiette assurance nouvelle','baseAN',BS)}</div></div>
+<div class="card"><h3>Indemnités de remboursement anticipé</h3>${chk('Appliquer les IRA','iraOn')}<div class="r2">${inp('% du CRD','iraPct')}${inp('Plafond (mois d\'intérêts)','iraMois')}</div><p class="note">IRA = min(% × CRD ; mois d'intérêts au taux actuel).</p></div>
+<div class="card"><h3>Offre de la nouvelle banque</h3>${chk('Durée = durée restante','dAuto')}${inp('Durée du nouveau prêt (mois)','nd','number',S.dAuto?'disabled':'','nd')}${chk('Taux selon le barème','tAuto')}${inp('Taux nominal (%)','tMan','number','','tx')}
+<table><tr><th>De (ans)</th><th>À (ans)</th><th>Taux %</th><th></th></tr>${S.bar.map((b,i)=>`<tr>${[0,1,2].map(j=>`<td><input type="number" step="any" data-k="bar.${i}.${j}" value="${b[j]}"></td>`).join('')}<td><button data-act="delB:${i}">✕</button></td></tr>`).join('')}</table><button data-act="addB" style="margin-top:8px">+ Tranche</button></div>
+<div class="card"><h3>Frais du rachat</h3><div class="r2">${inp('Frais de dossier (€)','frais')}${inp('Garantie (€)','gar')}${inp('Courtage (€)','cour')}${inp('Autres frais (€)','aut')}</div>${inp('Restitution de garantie (€)','restit')}${sel('Restitution comptée','rq',[['fin','À l\'échéance du prêt'],['rachat','Au rachat'],['non','Ignorée']])}${chk('Financer les frais et IRA dans le nouveau prêt','fin')}<p class="note">Garantie Crédit Logement : à saisir depuis le simulateur officiel.</p></div>
+<div class="card"><h3>Analyse</h3>${chk('Arrondir mensualités et intérêts au centime','arr')}<div class="r2">${inp('Taux d\'actualisation (%)','actu')}${inp('Horizon de détention (ans, 0 = terme)','hor')}</div><h3 style="margin-top:10px">Renégociation avec la banque actuelle</h3><div class="r2">${inp('Taux obtenu (%)','nego.t')}${inp('Frais d\'avenant (€)','nego.f')}</div></div></div>`}
+function pmDate(O,t){return t<0?'—':t==0?'dès le rachat':fd(addM(O.start,t-1))}
+const kp=(l,v,s,c='')=>`<div class="kp"><small>${l}</small><b class="${c}">${v}</b><small>${s||''}</small></div>`;
+function res(O){const b=O.base,S=O.S,h=S.hor>0?S.hor*12:0,pmm=b.tPM,eff=x=>x/(S.rev/12)*100,o0=O.oldRows[0];
+let v;if(b.gainT<=0)v=['ko','Rachat non pertinent','Le gain total est nul ou négatif : conservez le prêt actuel ou renégociez.'];
+else if(pmm>=0&&(!h||pmm<=h))v=['ok','Rachat pertinent',`Économie nette de ${e0(b.gainT)} ; frais amortis ${pmm?`en ${pmm} mois (${pmDate(O,pmm)})`:'immédiatement'}.`];
+else v=['wa','Rachat à nuancer',`Gain de ${e0(b.gainT)} au terme, mais le point mort (${pmm<0?'jamais atteint':pmm+' mois'}) dépasse l'horizon de ${S.hor} ans.`];
+O.v=v;const wp=pmm<0?100:pmm/b.T*100;const d=(a,b,c)=>`<tr><td>${a}</td><td>${b.a}</td><td>${b.n}</td><td class="${c===0?'':cl(-b.d)}">${b.d>0?'+':''}${b.t}</td></tr>`;
+const row=(l,x,y,f,neutral)=>d(l,{a:f(x),n:f(y),d:y-x,t:f(y-x)},neutral?0:1);
+const cmp=[row('Capital / nouveau prêt',O.CRD,b.P,eur,1),row('Durée (mois)',O.m,b.d,x=>fmt(x,0),1),row('Taux nominal',S.taux,b.rate,pc,1),row('Mensualité hors assurance',o0.m,b.pmt,eur),row('Assurance mensuelle',o0.a,b.ass,eur),row('Mensualité totale',o0.tot,b.tot,eur),row('Taux d\'effort',eff(o0.tot),eff(b.tot),pc),row('Intérêts restants',O.oI,b.si,e0),row('Assurance restante',O.oA,b.sa,e0),row('IRA + frais',0,b.costs,e0),row('Restitution de garantie',0,-b.rs,e0),row('Coût total restant',O.cO,b.cost,e0),row('Taux effectif restant (assurance incluse)',O.teg0,b.teg,pc)].join('');
+const gh=S.hor>0?b.g[Math.min(h,b.T)]:null;
+$('#p_res').innerHTML=`<div class="hero ${v[0]}"><div><span class="vt">${v[1]}</span><p>${v[2]}</p></div><div><div class="tk"><div class="tr"><i class="neg" style="width:${wp}%"></i><i class="pos" style="width:${100-wp}%"></i></div><b class="mk" style="left:${wp}%"></b></div><div class="tls"><span>Rachat</span><span>${pmm<0?'Point mort non atteint':pmm?'Point mort : '+pmm+' mois ('+pmDate(O,pmm)+')':'Rentable dès le rachat'}</span><span>${b.T} mois</span></div></div></div>${!S.tAuto||O.lk!=null?'':`<div class="vd wa">Durée hors barème : le taux manuel (${pc(S.tMan)}) est utilisé.</div>`}
+<div class="g k" style="margin-bottom:14px">${kp('Mensualité actuelle',eur(o0.tot),'assurance incluse')}${kp('Nouvelle mensualité',eur(b.tot),'assurance incluse')}${kp('Gain mensuel',eur(b.gainM),'',cl(b.gainM))}${kp('Gain total net',e0(b.gainT),'frais et IRA déduits',cl(b.gainT))}${kp('Point mort',pmm<0?'Jamais':pmm?pmm+' mois':'Immédiat',pmm>0?pmDate(O,pmm):'',pmm<0?'ko':'ok')}${kp('Gain actualisé',e0(b.npv),'à '+pc(S.actu),cl(b.npv))}${gh==null?'':kp('Gain à '+S.hor+' ans',e0(gh),'revente/remboursement',cl(gh))}</div>
+<div class="card"><h3>Montant du nouveau prêt</h3><p style="margin:0">CRD ${eur(O.CRD)} au ${O.start.slice(0,7)} ${S.fin?`+ IRA ${eur(b.ira)} + frais ${eur(O.fees)} = <b>${eur(b.P)}</b>`:`; IRA et frais (${eur(b.costs)}) payés comptant, nouveau prêt = <b>${eur(b.P)}</b>`}.</p><p class="note" style="margin:6px 0 0">Point mort simple (frais ÷ gain mensuel) : ${b.gainM>0?fmt((b.costs-(S.rq=='non'?0:b.rs))/b.gainM,1)+' mois':'non applicable'}.</p></div>
+<div class="card"><h3>Comparatif</h3><div class="tw"><table><tr><th></th><th>Actuel</th><th>Après rachat</th><th>Écart</th></tr>${cmp}</table></div></div>
+<div class="g"><div class="card"><h3>Gain cumulé net (point mort à 0)</h3><div class="ch"><canvas id="c1"></canvas></div></div><div class="card"><h3>Capital restant dû</h3><div class="ch"><canvas id="c2"></canvas></div></div></div>`;charts(O)}
+function charts(O){if(!window.Chart)return;const b=O.base,lab=['Rachat',...Array.from({length:b.T},(_,i)=>fd(addM(O.start,i)))],mu=getComputedStyle(document.documentElement).getPropertyValue('--mu'),
+op={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{labels:{color:mu}}},scales:{x:{ticks:{color:mu,maxTicksLimit:8}},y:{ticks:{color:mu}}},elements:{point:{radius:0}}};
+C1&&C1.destroy();C2&&C2.destroy();
+C1=new Chart($('#c1'),{type:'line',data:{labels:lab,datasets:[{label:'Gain cumulé (€)',data:b.g,fill:'origin',borderWidth:2,borderColor:'#0f766e',backgroundColor:'#0f766e22',segment:{borderColor:c=>c.p1.parsed.y<0?'#c2410c':'#15803d'}}]},options:op});
+const pad=(a,n)=>Array.from({length:n+1},(_,i)=>a[i]??0);
+C2=new Chart($('#c2'),{type:'line',data:{labels:lab,datasets:[{label:'Prêt actuel',data:pad([O.CRD,...O.oldRows.map(r=>r.end)],b.T),borderColor:'#c2410c',borderWidth:2},{label:'Nouveau prêt',data:pad([b.P,...b.rows.map(r=>r.end)],b.T),borderColor:'#0f766e',borderWidth:2}]},options:op})}
+function sch(O){const n=V.sch=='new',rows=n?O.base.rows:O.old,k=O.k;
+$('#p_sch').innerHTML=`<div class="bar" style="margin-bottom:10px"><button data-act="sch:old" class="${n?'':'on'}">Prêt actuel</button><button data-act="sch:new" class="${n?'on':''}">Nouveau prêt</button><button data-act="copyS">Copier le tableau (Excel)</button></div><p class="note">${n?'Nouveau prêt : première échéance en '+fd(addM(O.start,0))+'.':'Échéances déjà payées en grisé ('+k+'), ligne surlignée : premier paiement après rachat.'}</p>
+<div class="card tw"><table><tr><th>N°</th><th>Date</th><th>CRD début</th><th>Mensualité</th><th>Intérêts</th><th>Capital</th><th>Assurance</th><th>Total</th><th>CRD fin</th></tr>${rows.map(r=>`<tr class="${!n&&r.i<=k?'pd':!n&&r.i==k+1?'hl':''}"><td>${r.i}</td><td>${fd(r.d)}</td>${[r.crd,r.m,r.it,r.cap,r.a,r.tot,r.end].map(x=>`<td>${eur(x)}</td>`).join('')}</tr>`).join('')}</table></div>`}
+function alt(O){const S=O.S,b=O.base,ds=[...new Set([O.m,O.nd,120,180,240,300])].filter(d=>d>=12).sort((x,y)=>x-y);
+const line=(l,s,x)=>`<tr class="${x||''}"><td>${l}</td><td>${fmt(s.d,0)}</td><td>${pc(s.rate)}</td><td>${eur(s.tot)}</td><td class="${cl(s.gainM)}">${eur(s.gainM)}</td><td>${e0(s.cost)}</td><td class="${cl(s.gainT)}">${e0(s.gainT)}</td><td>${s.tPM<0?'—':s.tPM}</td></tr>`;
+const L=[];ds.forEach(d=>{const r=rateFor(S,d);if(r!=null)L.push([`Rachat sur ${d} mois`+(d==O.m?' (durée restante)':''),scen(S,O,d,r)])});
+const cd=constDur(S,O);if(cd)L.push([`Rachat en gardant la mensualité (${cd} mois)`,scen(S,O,cd,rateFor(S,cd))]);
+if(S.nego.t>0)L.push([`Renégociation banque actuelle (${pc(S.nego.t)})`,scen(S,O,O.m,S.nego.t,{ira:0,fees:S.nego.f,rs:0})]);
+O.alts=L;const best=Math.max(...L.map(x=>x[1].gainT)),sv=O.oldRows[0];
+const sens=[];for(let i=-4;i<=4;i++){const r=O.rate+i*.25;if(r>=0)sens.push(`<tr class="${i?'':'hl'}"><td>${pc(r)}</td>${(s=>`<td>${eur(s.tot)}</td><td class="${cl(s.gainM)}">${eur(s.gainM)}</td><td class="${cl(s.gainT)}">${e0(s.gainT)}</td><td>${s.tPM<0?'—':s.tPM}</td>`)(scen(S,O,O.nd,r))}</tr>`)}
+$('#p_alt').innerHTML=`<div class="card"><h3>Alternatives</h3><div class="tw"><table><tr><th>Scénario</th><th>Durée</th><th>Taux</th><th>Mensualité</th><th>Gain mensuel</th><th>Coût total restant</th><th>Gain total</th><th>Point mort (mois)</th></tr><tr><td>Statu quo (ne rien faire)</td><td>${O.m}</td><td>${pc(S.taux)}</td><td>${eur(sv.tot)}</td><td>0,00 €</td><td>${e0(O.cO)}</td><td>0 €</td><td>—</td></tr>${L.map(([l,s])=>line(l,s,s.gainT==best&&best>0?'hl':'')).join('')}</table></div>
+<p class="note">Meilleur gain total surligné. Frais, garantie et restitution identiques dans chaque scénario (la garantie réelle varie avec le montant et la durée). Paramètres de renégociation : onglet Données.</p></div>
+<div class="card"><h3>Sensibilité au taux proposé (durée ${O.nd} mois)</h3><div class="tw"><table><tr><th>Taux</th><th>Mensualité</th><th>Gain mensuel</th><th>Gain total</th><th>Point mort (mois)</th></tr>${sens.join('')}</table></div></div>`}
+const CI=[['mensA','Mensualité actuelle hors assurance',O=>O.oldRows[0].m],['totA','Mensualité actuelle totale',O=>O.oldRows[0].tot],['crd','CRD au rachat',O=>O.CRD],['ira','IRA',O=>O.ira],['pret','Montant du nouveau prêt',O=>O.base.P],['mensN','Nouvelle mensualité hors assurance',O=>O.base.pmt],['totN','Nouvelle mensualité totale',O=>O.base.tot],['gm','Gain mensuel',O=>O.base.gainM],['gt','Gain total',O=>O.base.gainT]];
+const XL={mensA:2823.93,totA:2984.43,crd:430175.85,ira:8603.52,pret:444818.37,mensN:2641.68,totN:2741.77,gm:242.66};
+function ctlInit(){$('#p_ctl').innerHTML=`<div class="card"><h3>Contrôle Excel / IA</h3><p class="note">Saisissez vos valeurs Excel et IA : l'écart avec le simulateur est calculé automatiquement.</p><div class="r2" style="max-width:420px">${inp('Tolérance (€)','tol')}<label>&nbsp;<button data-act="loadEx">Charger mon Excel (cas Burato)</button></label></div>
+<div class="tw"><table><tr><th>Indicateur</th><th>Simulateur</th><th>Excel</th><th>Écart</th><th>IA</th><th>Écart</th></tr>${CI.map(([id,l])=>`<tr><td>${l}</td><td id="v_${id}"></td>${['ex','ia'].map(w=>`<td><input type="number" step="any" data-k="${w}.${id}" id="${w}_${id}"></td>${w=='ex'?`<td id="e_${id}"></td>`:`<td id="a_${id}"></td>`}`).join('')}</tr>`).join('')}</table></div></div>
+<div class="card"><h3>Analyse critique</h3>${['Où l\'IA s\'est-elle trompée, et pourquoi ?','Qu\'avez-vous dû préciser dans votre prompt ?','Ce module peut-il être utilisé devant un client ? À quelles conditions ?','Excel ou IA : lequel au cabinet, et pour quoi faire ?'].map((q,i)=>`<label>${i+1}. ${q}<textarea rows="3" data-k="qs.${i}">${esc(S.qs[i])}</textarea></label>`).join('')}</div>`}
+function ctl(O){CI.forEach(([id,,f])=>{const v=O.err?NaN:f(O);$('#v_'+id).textContent=isFinite(v)?eur(v):'—';[['ex','e'],['ia','a']].forEach(([w,p])=>{const x=S[w][id],c=$('#'+p+'_'+id);if(x===''||x==null||!isFinite(v)){c.textContent='';return}const e=x-v,ok=Math.abs(e)<=num(S.tol);c.innerHTML=`<span class="${ok?'ok':'ko'}">${ok?'✓':'✗'} ${eur(e)}</span>`})})}
+function run(){CUR=calc(S);const O=CUR;
+if(O.err){['#p_res','#p_sch','#p_alt'].forEach(s=>$(s).innerHTML=`<div class="card ${O.info?'':'er'}">${O.err}</div>`)}else{res(O);sch(O);alt(O)}
+ctl(O);const nd=$('#nd'),tx=$('#tx');if(nd){if(!O.err){if(S.dAuto)nd.value=O.nd;if(S.tAuto&&O.lk!=null)tx.value=O.rate}nd.disabled=S.dAuto;tx.disabled=S.tAuto&&!O.err&&O.lk!=null}}
+function toast(t){const e=$('#tst');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
+function copy(t){const ok=()=>toast('Copié dans le presse-papiers'),fb=()=>{const m=$('#mod');m.querySelector('textarea').value=t;m.style.display='flex';m.querySelector('textarea').select()};
+try{navigator.clipboard?navigator.clipboard.writeText(t).then(ok,fb):fb()}catch(e){fb()}}
+const tab=t=>{document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id=='p_'+t));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.act=='tab:'+t));window.dispatchEvent(new Event('resize'))};
+$('#nav').innerHTML=[['dat','Données'],['res','Résultats'],['sch','Échéanciers'],['alt','Alternatives'],['rap','Rapport PDF'],['ctl','Contrôle Excel / IA']].map(([k,l])=>`<button data-act="tab:${k}">${l}</button>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const[a,x]=b.dataset.act.split(':'),i=+x;
+if(a=='tab')tab(x);else if(a=='sch'){V.sch=x;run()}
+else if(a=='burato'||a=='nouveau'){S=a=='burato'?clone(D0):blank();V.imp=null;form();ctlInit();rapInit();run();tab(a=='burato'?'res':'dat')}
+else if(a=='imp'){tab('dat');const p=$('#pf');p&&p.click()}
+else if(a=='applyImp'&&V.imp&&V.imp.patch){S=Object.assign(blank(),V.imp.patch);S.rep.dossier=V.imp.name.replace(/\.pdf$/i,'');V.imp=null;form();ctlInit();rapInit();run();tab(CUR.err?'dat':'res')}
+else if(a=='cancelImp'){V.imp=null;form()}
+else if(a=='pdf')pdf();
+else if(a=='addE'){S.emp.push({n:'Emprunteur '+(S.emp.length+1),q:100,ao:.3,an:.2});form();run()}
+else if(a=='delE'){S.emp.splice(i,1);form();run()}
+else if(a=='addB'){const l=S.bar[S.bar.length-1]||[0,0,0];S.bar.push([l[1]+1,l[1]+5,l[2]]);form();run()}
+else if(a=='delB'){S.bar.splice(i,1);form();run()}
+else if(a=='theme'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme=='dark':(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark';if(CUR&&!CUR.err)charts(CUR)}
+else if(a=='close')$('#mod').style.display='none';
+else if(a=='loadEx'){S.ex=Object.assign({},XL);Object.keys(XL).forEach(k=>$('#ex_'+k).value=XL[k]);run()}
+else if(a=='copyS'&&CUR&&!CUR.err){const r=V.sch=='new'?CUR.base.rows:CUR.old;copy(['N°','Date','CRD début','Mensualité','Intérêts','Capital','Assurance','Total','CRD fin'].join('\t')+'\n'+r.map(x=>[x.i,ymd(x.d),x.crd,x.m,x.it,x.cap,x.a,x.tot,x.end].map(v=>typeof v=='number'?String(Math.round(v*100)/100).replace('.',','):v).join('\t')).join('\n'))}
+else if(a=='copyR'&&CUR&&!CUR.err){const b=CUR.base;copy(`Rachat de prêt au ${CUR.S.rachat}\nCRD : ${eur(CUR.CRD)} | IRA : ${eur(CUR.ira)} | Nouveau prêt : ${eur(b.P)} à ${pc(b.rate)} sur ${b.d} mois\nMensualité : ${eur(CUR.oldRows[0].tot)} -> ${eur(b.tot)} (gain ${eur(b.gainM)}/mois)\nGain total net : ${e0(b.gainT)} | Point mort : ${b.tPM<0?'jamais':b.tPM+' mois ('+pmDate(CUR,b.tPM)+')'}`)}});
+document.addEventListener('input',e=>{const el=e.target,k=el.dataset.k;if(!k)return;let v=el.type=='checkbox'?el.checked:el.type=='number'?(el.value===''||isNaN(+el.value)?'':+el.value):el.value;
+const p=k.split('.'),last=p.pop();p.reduce((a,q)=>a[q],S)[last]=v;
+if(k=='dAuto'&&!v&&CUR&&!CUR.err)S.nd=CUR.nd;if(k=='tAuto'&&!v&&CUR&&!CUR.err)S.tMan=CUR.rate;run()});
+const PH={cap:'ex. 250 000',taux:'ex. 3,5',duree:'ex. 240',rev:'ex. 80 000',iraPct:'ex. 3',iraMois:'ex. 6',frais:'ex. 1 000',gar:'ex. 3 000',tMan:'ex. 3,1',actu:'ex. 3','emp.i.n':'ex. M. Dupont','emp.i.q':'100','emp.i.ao':'ex. 0,30','emp.i.an':'ex. 0,20'};
+const blank=()=>({cap:'',taux:'',duree:'',debut:'',rachat:'',rev:'',emp:[{n:'',q:'',ao:'',an:''}],baseAO:'init',baseAN:'init',iraOn:true,iraPct:'',iraMois:'',frais:'',gar:'',cour:'',aut:'',restit:'',rq:'fin',fin:true,bar:[['','','']],dAuto:true,nd:'',tAuto:true,tMan:'',arr:false,actu:'',hor:'',nego:{t:'',f:''},tol:1,ex:{},ia:{},qs:['','','',''],rep:{dossier:'',clients:'',cabinet:'',conseiller:'',comm:'',obj:''}});
+function rapInit(){$('#p_rap').innerHTML=`<div class="card"><h3>Rapport d'adéquation pour le client (PDF, 5 slides)</h3><p class="note">1 Situation actuelle · 2 Proposition de la nouvelle banque · 3 Économie réalisée · 4 Alternatives · 5 Recommandation. Le contenu s'adapte automatiquement aux données saisies.</p><div class="g">${inp('Titre du dossier','rep.dossier','text')}${inp('Client(s)','rep.clients','text')}${inp('Cabinet','rep.cabinet','text')}${inp('Conseiller','rep.conseiller','text')}</div><label style="margin-top:10px">Objectif du client<input data-k="rep.obj" type="text" value="${esc(S.rep.obj)}" placeholder="ex. Conserver la durée restante et baisser la mensualité"></label><label>Commentaire du conseiller (slide 5)<textarea rows="4" data-k="rep.comm" placeholder="Optionnel">${esc(S.rep.comm)}</textarea></label><div class="bar" style="margin-top:12px"><button class="pri" data-act="pdf">Générer le PDF</button></div></div>`}
+const LJ='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',PJ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',PW='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const L={},lib=u=>L[u]||(L[u]=new Promise((ok,ko)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>{delete L[u];ko(new Error('Chargement impossible (connexion ?)'))};document.head.appendChild(s)}));
+const pt=x=>String(x).replace(/[\u00a0\u202f]/g,' ').replace(/\u2212/g,'-');
+//PARSE
+function parse(t){
+const s=t.replace(/[\u00a0\u202f]/g,' ').replace(/\s+/g,' '),NUM='(\\d{1,3}(?:[ .]\\d{3})+(?:,\\d+)?|\\d+(?:[,.]\\d+)?)',
+n=x=>{x=String(x).replace(/ /g,'');return parseFloat(/^\d{1,3}(\.\d{3})+$/.test(x)?x.replace(/\./g,''):x.replace(',','.'))},
+m=re=>s.match(new RegExp(re,'i')),MO=['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'],
+dt=re=>{const i=s.search(new RegExp(re,'i'));if(i<0)return null;const z=s.slice(i,i+110).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();let a=z.match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/);if(a)return a[3]+'-'+a[2].padStart(2,'0')+'-'+a[1].padStart(2,'0');a=z.match(new RegExp('('+MO.join('|')+') (\\d{4})'));if(a)return a[2]+'-'+String(MO.indexOf(a[1])+1).padStart(2,'0')+'-01';a=z.match(/(\d{1,2})[\/.-](\d{4})/);return a?a[2]+'-'+a[1].padStart(2,'0')+'-01':null},
+F={},I=[],ad=(k,l,v,d)=>{if(v!=null&&v!==''&&(typeof v=='string'||!isNaN(v))){F[k]=v;I.push([l,d])}},fr=d=>d.split('-').reverse().join('/'),K=a=>a[a.length-1]?1000:1;
+let a=m('(?:montant|capital)(?: du (?:pr[êe]t|cr[ée]dit))?(?: initial| emprunt[ée]| financ[ée])?[^\\d]{0,20}'+NUM+' ?(k?) ?(?:€|euros?)');if(a)ad('cap','Capital initial',n(a[1])*K(a),e0(n(a[1])*K(a)));
+a=m('taux(?: nominal| d.int[ée]r[êe]ts?| actuel)?(?: hors assurance)?[^\\d%]{0,20}'+NUM+' ?%');if(a)ad('taux','Taux hors assurance',n(a[1]),pc(n(a[1])));
+a=m('dur[ée]e(?: initiale| du pr[êe]t| totale)?[^\\d]{0,15}(\\d{1,3}) ?(mois|ans)');if(a){const v=+a[1]*(/ans/i.test(a[2])?12:1);ad('duree','Durée initiale',v,v+' mois')}
+let d=dt('d[ée]but du pr[êe]t|1re [ée]ch[ée]ance|premi[èe]re [ée]ch[ée]ance|mise [àa] disposition');if(d)ad('debut','1re échéance',d,fr(d));
+d=dt('date de r[ée]f[ée]rence|rachat prend effet|date de rachat|remboursement anticip[ée] (?:le|au)');if(d)ad('rachat','Date de rachat',d,fr(d));
+a=m(NUM+' ?(k?) ?€ de revenus')||m('revenus?(?: annuels?| nets?| du foyer)?[^\\d]{0,25}'+NUM+' ?(k?) ?€');if(a)ad('rev','Revenus annuels',n(a[1])*K(a),e0(n(a[1])*K(a)));
+let Q=[];a=m('quotit[ée]s? ?:? ?(\\d{1,3}) ?% ?[-–/] ?(\\d{1,3}) ?%');if(a)Q=[+a[1],+a[2]];else if(a=m('quotit[ée] ?:? ?(\\d{1,3}) ?%'))Q=[+a[1]];
+a=m(NUM+' ?% (?:par t[êe]te|par emprunteur|par personne)');const ao=a?n(a[1]):null;
+a=m('par t[êe]te sur (?:le )?capital (initial|restant d[ûu])');if(a)F.baseAO=/init/i.test(a[1])?'init':'crd';
+let AN=[];const j=s.search(/assurance d[ée]l[ée]gu[ée]e/i);if(j>=0){const z=s.slice(j,j+240);AN=[...z.matchAll(new RegExp('(M\\.|Mme|Mr|Mlle|Monsieur|Madame) ?'+NUM+' ?%','g'))].map(x=>[x[1],n(x[2])]);if(/capital restant d[ûu]/i.test(z))F.baseAN='crd'}
+const c=Math.max(Q.length,AN.length,ao!=null?1:0);if(c){F.emp=Array.from({length:c},(_,i)=>({n:AN[i]?AN[i][0]:c>1?['M.','Mme'][i]||'Emprunteur '+(i+1):'',q:Q[i]??Q[0]??100,ao:ao??'',an:AN[i]?AN[i][1]:''}));I.push(['Emprunteurs et assurances',F.emp.map(e=>`${esc(e.n)||'Emprunteur'} : quotité ${e.q} %, assurance ${e.ao===''?'?':pc(e.ao)} puis ${e.an===''?'?':pc(e.an)}`).join('<br>')])}
+a=m(NUM+' ?% (?:du|de) ?(?:CRD|capital restant d[ûu])');const ip=a?n(a[1]):null;let im=null;
+a=m('plafonn[ée]e?s? [àa] (\\d+|un|une|six|douze) ?(semestres?|mois|ann[ée]es?)');if(a){const q=({un:1,une:1,six:6,douze:12})[a[1].toLowerCase()]??+a[1];im=q*(/^sem/i.test(a[2])?6:/^ann/i.test(a[2])?12:1)}
+if(ip!=null||im!=null){F.iraOn=true;if(ip!=null)F.iraPct=ip;if(im!=null)F.iraMois=im;I.push(['IRA',(ip!=null?ip+' % du CRD':'')+(im!=null?' plafonnées à '+im+' mois d\'intérêts':'')])}
+[['frais','Frais de dossier','frais de dossier'],['gar','Garantie','garantie'],['cour','Courtage','courtage'],['restit','Restitution de garantie','restitution']].forEach(([k,l,r])=>{const q=m(r+'[^\\d]{0,15}'+NUM+' ?€');if(q)ad(k,l,n(q[1]),e0(n(q[1])))});
+const B=[...s.matchAll(new RegExp('(\\d{1,2}) ?[–—-] ?(\\d{1,2}) ans ?'+NUM+' ?%','gi'))].map(x=>[+x[1],+x[2],n(x[3])]);if(B.length){F.bar=B;I.push(['Barème de taux',B.map(b=>`${b[0]}–${b[1]} ans : ${pc(b[2])}`).join('<br>')])}
+const miss=[['cap','capital'],['taux','taux'],['duree','durée'],['debut','date de 1re échéance'],['rachat','date de rachat'],['bar','barème de taux'],['emp','assurances'],['gar','garantie']].filter(([k])=>!(k in F)).map(x=>x[1]);
+return{patch:F,items:I,miss}}
+//ENDPARSE
+async function readPdf(f){await lib(PJ);await lib(PW);pdfjsLib.GlobalWorkerOptions.workerSrc=PW;const doc=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise;let t='';for(let p=1;p<=doc.numPages;p++){const c=await(await doc.getPage(p)).getTextContent();c.items.forEach(i=>t+=i.str+(i.hasEOL?'\n':' '));t+='\n'}return t}
+async function doImport(f){V.imp={name:f.name,load:1};form();try{if(!/\.pdf$/i.test(f.name)&&f.type!='application/pdf')throw new Error('Le fichier doit être un PDF.');const r=parse(await readPdf(f));V.imp=r.items.length?Object.assign({name:f.name},r):{name:f.name,err:'Aucune donnée reconnue (PDF scanné ou format inhabituel). Saisissez les données à la main.'}}catch(e){V.imp={name:f.name,err:'Lecture impossible : '+(e.message||e)}}form()}
+const impRes=()=>{const I=V.imp;if(I.load)return'<p class="note">Lecture du PDF…</p>';if(I.err)return`<p class="er">${esc(I.err)}</p>`;return`<div class="tw" style="max-height:260px"><table><tr><th>Donnée détectée dans « ${esc(I.name)} »</th><th>Valeur</th></tr>${I.items.map(([a,b])=>`<tr><td>${a}</td><td style="text-align:left">${b}</td></tr>`).join('')}</table></div>${I.miss.length?`<p class="note">Non détecté : ${I.miss.join(', ')}. À compléter à la main. Vérifiez les valeurs : l'extraction est automatique.</p>`:''}<div class="bar" style="margin-top:8px"><button class="pri" data-act="applyImp">Appliquer et calculer</button><button data-act="cancelImp">Annuler</button></div>`};
+const impCard=()=>`<div class="card dz"><h3>Nouveau cas depuis un PDF</h3><p class="note">Déposez ici un énoncé, une offre de prêt ou un tableau d'amortissement (PDF avec texte). Les valeurs détectées sont affichées pour vérification avant d'être appliquées à un dossier vierge.</p><label>Choisir un PDF<input type="file" id="pf" accept="application/pdf,.pdf"></label>${V.imp?impRes():''}</div>`;
+document.addEventListener('change',e=>{if(e.target.id=='pf'&&e.target.files[0])doImport(e.target.files[0])});
+['dragover','dragleave','drop'].forEach(t=>document.addEventListener(t,e=>{const z=e.target.closest&&e.target.closest('.dz');if(!z)return;e.preventDefault();z.classList.toggle('over',t=='dragover');if(t=='drop'&&e.dataTransfer.files[0])doImport(e.dataTransfer.files[0])}));
+function buildPdf(J,O){
+const Z=O.S,b=O.base,rp=S.rep,o0=O.oldRows[0],v=O.v,W=297,H=167,M=12,NV=[14,42,71],GD=[200,150,62],GR=[15,123,90],RD=[184,67,43],MU=[88,107,128],LT=[241,245,250],TX=[30,40,55],WH=[255,255,255],
+doc=new J({orientation:'landscape',unit:'mm',format:[W,H]}),vc={ok:GR,ko:RD,wa:[168,106,12]}[v[0]],nf=x=>String(Math.round(x*100)/100).replace('.',','),eff=x=>x/(Z.rev/12)*100,
+col=c=>doc.setTextColor(...c),ft=(s,z)=>{doc.setFont('helvetica',s);doc.setFontSize(z)},T=(s,x,y,o)=>doc.text(pt(s),x,y,o),
+fl=(c,x,y,w,h,r=1.5,st='F')=>{doc.setFillColor(...c);doc.roundedRect(x,y,w,h,r,r,st)},ln=(c,w)=>{doc.setDrawColor(...c);doc.setLineWidth(w)},
+sl=(n,t)=>{if(n>1)doc.addPage();doc.setFillColor(...NV);doc.rect(0,0,W,22,'F');doc.setFillColor(...GD);doc.rect(0,22,W,1.1,'F');ft('bold',19);col(WH);T(n+'  '+t,M,14.5);ft('normal',9);T([rp.clients,rp.dossier].filter(Boolean).join(' · ')||'Étude de rachat de prêt immobilier',W-M,14.5,{align:'right'});ln([214,223,234],.2);doc.line(M,H-9,W-M,H-9);ft('normal',7.5);col(MU);T('Simulation non contractuelle'+(rp.cabinet?' · '+rp.cabinet:''),M,H-4.5);T(n+' / 5',W-M,H-4.5,{align:'right'})},
+hd=(s,x,y)=>{ft('bold',11);col(NV);T(s,x,y);ln(GD,.6);doc.line(x,y+1.6,x+14,y+1.6)},
+tile=(x,y,w,l,val,sub,c=NV)=>{ln([214,223,234],.2);fl(LT,x,y,w,23,2,'FD');doc.setFillColor(...GD);doc.rect(x,y+2,1.1,19,'F');ft('normal',8);col(MU);T(l,x+4,y+6);ft('bold',15);col(c);T(val,x+4,y+14.5);ft('normal',7.5);col(MU);T(sub||'',x+4,y+20)},
+tbl=(x,y,w,cw,head,rows,o={})=>{const fs=o.fs||9,rh=o.rh||6.4,tt=cw.reduce((a,c)=>a+c,0),X=[];let a=x;cw.forEach(c=>{X.push(a);a+=c/tt*w});X.push(x+w);const px=i=>i?X[i+1]-2:X[0]+2,al=i=>({align:i?'right':'left'});
+doc.setFillColor(...NV);doc.rect(x,y,w,rh,'F');ft('bold',fs-.5);col(WH);head.forEach((s,i)=>T(s,px(i),y+rh*.68,al(i)));
+rows.forEach((r,j)=>{const yy=y+rh*(j+1),hl=o.hl&&o.hl.includes(j);if(hl){doc.setFillColor(250,236,205);doc.rect(x,yy,w,rh,'F')}else if(j%2){doc.setFillColor(...LT);doc.rect(x,yy,w,rh,'F')}
+ft(hl||(o.bold&&o.bold.includes(j))?'bold':'normal',fs);r.forEach((s,i)=>{col(Array.isArray(s)?s[1]:TX);T(Array.isArray(s)?s[0]:s,px(i),yy+rh*.68,al(i))})});
+ln([214,223,234],.2);doc.line(x,y+rh*(rows.length+1),x+w,y+rh*(rows.length+1));return y+rh*(rows.length+1)},
+bl=(it,x,y,w,fs=9.5,gap=2.6)=>{it.forEach(s=>{ft('normal',fs);col(TX);const L=doc.splitTextToSize(pt(s),w-5);doc.setFillColor(...GD);doc.rect(x,y-2.3,1.8,1.8,'F');doc.text(L,x+4.5,y);y+=L.length*fs*.41+gap});return y},
+dl=(a,c,f)=>{const d=c-a;return[(d>0?'+':'')+f(d),d<0?GR:d>0?RD:TX]},
+insN=k=>Z.emp.map(e=>(e.n||'Emprunteur')+' '+pc(e[k])+' (quotité '+nf(e.q)+' %)').join(' · '),
+pmT=b.tPM<0?'Non atteint':b.tPM?b.tPM+' mois':'Immédiat',pmD=b.tPM>0?pmDate(O,b.tPM):'',today=new Date().toLocaleDateString('fr-FR'),fRach=Z.rachat.split('-').reverse().join('/'),
+alts=O.alts||[],ri=alts.findIndex(([l,s])=>s.d==b.d&&s.rate==b.rate&&!/^Réneg/.test(l)),okS=s=>s.gainM>0&&s.d<=O.m,rt=v[0]=='ko'?'étudié':'retenu';
+// 1
+sl(1,'Situation actuelle');if(rp.obj){ft('italic',10);col(MU);T('Objectif du client : '+rp.obj,M,31)}
+const r1=[['Capital initial',eur(Z.cap)],['Taux nominal hors assurance',pc(Z.taux)],['Durée initiale',Z.duree+' mois ('+nf(Z.duree/12)+' ans)'],['Première échéance',fd(addM(Z.debut,0))],['Échéances payées au '+fRach,O.k+''],['Durée restante',O.m+' mois'],['Mensualité hors assurance',eur(o0.m)],['Assurance mensuelle',eur(o0.a)],['Mensualité totale',eur(o0.tot)],['Capital restant dû au rachat',eur(O.CRD)],['Intérêts restants à payer',e0(O.oI)],['Assurance restante à payer',e0(O.oA)],['Coût total restant',e0(O.cO)],['Taux effectif restant (assurance incluse)',pc(O.teg0)],...(Z.rev>0?[['Taux d\'effort (revenus '+e0(Z.rev)+')',pc(eff(o0.tot))]]:[])],rh1=Math.min(7,112/(r1.length+1));
+let y=tbl(M,36,165,[3,2],['Le prêt en cours',''],r1,{rh:rh1,bold:[8,9,12]});ft('normal',7.5);col(MU);doc.text(doc.splitTextToSize(pt('Assurance : '+insN('ao')+' sur '+(Z.baseAO=='init'?'capital initial':'capital restant dû')+'.'),165),M,y+4.5);
+tile(188,36,48,'Capital restant dû',e0(O.CRD),'au '+fRach);tile(239,36,46,'Mensualité totale',eur(o0.tot),'assurance incluse');tile(188,62,48,'Coût total restant',e0(O.cO),O.m+' mensualités');tile(239,62,46,'Taux effectif',pc(O.teg0),'assurance incluse');
+fl(LT,188,90,97,58,2);hd('Indemnités de remboursement anticipé',192,99);ft('normal',9);col(TX);
+if(Z.iraOn){const p=Z.iraPct/100*O.CRD,s=Z.iraMois/12*Z.taux/100*O.CRD;doc.text(doc.splitTextToSize(pt(`${nf(Z.iraPct)} % du CRD : ${eur(p)}\n${nf(Z.iraMois)} mois d'intérêts à ${pc(Z.taux)} : ${eur(s)}`),89),192,109);ft('bold',10.5);col(NV);T('IRA retenues (le plus faible) : '+eur(O.ira),192,125);ft('normal',7.5);col(MU);T('Elles s\'ajoutent au capital à rembourser.',192,131)}else{T('Non appliquées dans cette simulation.',192,109)}
+// 2
+sl(2,'Proposition chiffrée de la nouvelle banque');const tr=Z.bar.find(x=>Math.ceil(b.d/12)>=x[0]&&Math.ceil(b.d/12)<=x[1]),r2=[['Durée du nouveau prêt',b.d+' mois'+(b.d==O.m?' (durée restante)':'')],['Tranche du barème',Z.tAuto&&O.lk!=null&&tr?tr[0]+' à '+tr[1]+' ans':'Taux saisi'],['Taux nominal',pc(b.rate)],['Montant du nouveau prêt',eur(b.P)],['Mensualité hors assurance',eur(b.pmt)],['Assurance mensuelle (déléguée)',eur(b.ass)],['Mensualité totale',eur(b.tot)],['Intérêts sur la durée',e0(b.si)],['Assurance sur la durée',e0(b.sa)],['Coût total (net de restitution)',e0(b.cost)],['Taux effectif (assurance incluse)',pc(b.teg)]];
+y=tbl(M,32,150,[3,2],['Conditions proposées',''],r2,{rh:Math.min(7.4,100/(r2.length+1)),bold:[3,6]});ft('normal',7.5);col(MU);doc.text(doc.splitTextToSize(pt('Assurance : '+insN('an')+' sur '+(Z.baseAN=='init'?'capital initial':'capital restant dû')+'.'),150),M,y+4.5);
+const r3=[['Capital restant dû',eur(O.CRD)],['Indemnités de remboursement anticipé',eur(b.ira)],['Frais de dossier',eur(Z.frais)],['Garantie',eur(Z.gar)],...(Z.cour+Z.aut>0?[['Courtage et autres frais',eur(Z.cour+Z.aut)]]:[]),[Z.fin?'Nouveau prêt (frais financés)':'Nouveau prêt (frais payés comptant : '+eur(b.costs)+')',eur(b.P)]];
+y=tbl(172,32,113,[3,1.4],['Décomposition',''],r3,{rh:6.4,hl:[r3.length-1]});const tt=O.CRD+b.costs,wp=(O.CRD/tt)*113;fl(NV,172,y+4,wp,5,0);fl(GD,172+wp,y+4,113-wp,5,0);ft('normal',7.5);col(MU);T('Capital repris '+pc(O.CRD/tt*100)+'  |  Frais et IRA '+pc(b.costs/tt*100),172,y+13.5);y+=19;
+if(b.rs>0){ft('normal',8.5);col(TX);doc.text(doc.splitTextToSize(pt('Restitution de garantie : '+eur(b.rs)+(Z.rq=='fin'?' à l\'échéance du prêt':' au rachat')+', incluse dans le gain.'),113),172,y);y+=9}
+if(Z.bar.length){tbl(172,y,113,[1.4,1],['Barème de la banque','Taux'],Z.bar.map(x=>[x[0]+' à '+x[1]+' ans',pc(x[2])]),{fs:8.5,rh:5.4,hl:tr?[Z.bar.indexOf(tr)]:[]})}
+// 3
+sl(3,'Économie réalisée');const tw=(W-2*M-9)/4;tile(M,30,tw,'Économie mensuelle',eur(b.gainM),e0(b.gainM*12)+' par an',b.gainM>0?GR:RD);tile(M+tw+3,30,tw,'Gain total net',e0(b.gainT),'IRA et frais déduits',b.gainT>0?GR:RD);tile(M+2*(tw+3),30,tw,'Point mort',pmT,pmD||'frais amortis');tile(M+3*(tw+3),30,tw,'Décaissement initial',e0(b.up),Z.fin?'frais et IRA financés':'frais et IRA payés comptant');
+hd('Gain cumulé net : le point mort est le passage au-dessus de zéro',M,62);
+{const x=M,y0=66,w=152,h=78,g=b.g,n=g.length,mn=Math.min(...g,0),mx=Math.max(...g,0),pd=(mx-mn)*.08||1,lo=mn-pd,hi=mx+pd,px=i=>x+14+(w-18)*i/(n-1||1),py=q=>y0+h-8-(h-12)*(q-lo)/(hi-lo);
+ln([222,228,236],.15);ft('normal',7);col(MU);const r0=(hi-lo)/4,e=Math.pow(10,Math.floor(Math.log10(r0))),st=[1,2,5,10].map(m=>m*e).find(s=>s>=r0);for(let q=Math.ceil(lo/st)*st;q<=hi;q+=st){doc.line(x+14,py(q),x+w-4,py(q));T(fmt(Math.abs(q)<1e-6?0:q,0),x+12,py(q)+1,{align:'right'})}
+ln(NV,.35);doc.line(x+14,py(0),x+w-4,py(0));
+[[1,GR],[-1,RD]].forEach(([s,c])=>{const p=g.map(q=>s>0?Math.max(q,0):Math.min(q,0)),sg=[];for(let i=1;i<n;i++)sg.push([px(i)-px(i-1),py(p[i])-py(p[i-1])]);sg.push([0,py(0)-py(p[n-1])],[px(0)-px(n-1),0]);doc.setFillColor(...c.map(k=>Math.round(k*.2+204)));doc.lines(sg,px(0),py(p[0]),[1,1],'F',true)});
+const sg=[];for(let i=1;i<n;i++)sg.push([px(i)-px(i-1),py(g[i])-py(g[i-1])]);ln(NV,.7);doc.lines(sg,px(0),py(g[0]),[1,1],'S',false);
+ft('normal',7);col(MU);[0,.25,.5,.75,1].forEach(f=>{const i=Math.round((n-1)*f);T(i?fd(addM(O.start,i-1)):'Rachat',px(i),y0+h-2,{align:f==0?'left':f==1?'right':'center'})});
+if(b.tPM>0){const X=px(b.tPM);ln(GD,.5);doc.setLineDashPattern([1.2,1.2],0);doc.line(X,y0,X,py(lo+(hi-lo)*.0)-0);doc.setLineDashPattern([],0);doc.setFillColor(...GD);doc.circle(X,py(0),1.7,'F');ft('bold',8);col(NV);T('Point mort : '+b.tPM+' mois ('+pmD+')',X>x+w*.6?X-2:X+2,y0+3,{align:X>x+w*.6?'right':'left'})}}
+ft('normal',8.5);col(TX);doc.text(doc.splitTextToSize(pt('Trésorerie : '+(b.gainM>=0?eur(b.gainM)+' libérés':'mensualité en hausse de '+eur(-b.gainM))+' chaque mois ('+e0(Math.abs(b.gainM*12))+' par an)'+(b.rs>0?' ; restitution de garantie de '+eur(b.rs)+(Z.rq=='fin'?' en fin de prêt.':' au rachat.'):'.')),152),M,H-14);
+const r4=[['Mensualité totale',eur(o0.tot),eur(b.tot),dl(o0.tot,b.tot,eur)],['Intérêts restants',e0(O.oI),e0(b.si),dl(O.oI,b.si,e0)],['Assurance restante',e0(O.oA),e0(b.sa),dl(O.oA,b.sa,e0)],['IRA et frais','—',e0(b.costs),dl(0,b.costs,e0)],...(b.rs>0?[['Restitution de garantie','—','-'+e0(b.rs),dl(0,-b.rs,e0)]]:[]),['Coût total restant',e0(O.cO),e0(b.cost),dl(O.cO,b.cost,e0)],['Taux effectif',pc(O.teg0),pc(b.teg),dl(O.teg0,b.teg,pc)],...(Z.rev>0?[['Taux d\'effort',pc(eff(o0.tot)),pc(eff(b.tot)),dl(eff(o0.tot),eff(b.tot),pc)]]:[])];
+tbl(172,64,113,[2.2,1.3,1.3,1.3],['','Actuel','Après','Écart'],r4,{fs:8.5,rh:Math.min(7.2,76/(r4.length+1)),bold:[r4.findIndex(r=>r[0]=='Coût total restant')]});
+// 4
+sl(4,'Alternatives étudiées');if(rp.obj){ft('italic',10);col(MU);T('Objectif du client : '+rp.obj,M,31)}
+const r5=[['Statu quo (ne rien faire)',O.m+'',pc(Z.taux),eur(o0.tot),'0,00 €',e0(O.cO),'0 €','—','—'],...alts.map(([l,s],i)=>[l+(i==ri?' ('+rt+')':''),s.d+'',pc(s.rate),eur(s.tot),[eur(s.gainM),s.gainM>0?GR:RD],e0(s.cost),[e0(s.gainT),s.gainT>0?GR:RD],s.tPM<0?'—':s.tPM+' mois',okS(s)?['Oui',GR]:['Non',RD]])],rh5=Math.min(7,74/(r5.length+1));
+y=tbl(M,36,W-2*M,[3.6,.8,.8,1.2,1.2,1.5,1.2,1.1,.9],['Scénario','Durée','Taux','Mensualité','Gain mensuel','Coût total restant','Gain total','Point mort','Objectif*'],r5,{rh:rh5,fs:8.8,hl:ri>=0?[ri+1]:[]});
+ft('normal',7.5);col(MU);T('* Objectif respecté : mensualité plus basse sans allonger la durée restante. Coût total restant net de restitution de garantie.',M,y+4.5);y+=11;
+const best=alts.reduce((a,c)=>c[1].gainT>a[1].gainT?c:a,alts[0]||['',{gainT:-1e12}]),tx4=[];
+if(ri>=0)tx4.push(`Scénario ${rt} : rachat sur ${b.d} mois à ${pc(b.rate)}, mensualité ${b.gainM>0?'réduite':'modifiée'} de ${eur(Math.abs(b.gainM))} et gain net de ${e0(b.gainT)}.`);
+if(alts.length&&best[1].d!=b.d&&best[1].gainT>b.gainT)tx4.push(`Le gain total le plus élevé (${best[0]} : ${e0(best[1].gainT)}) suppose une mensualité de ${eur(best[1].tot)}, ${best[1].tot>o0.tot?'supérieure':'inférieure'} à l'actuelle${best[1].d>O.m?' et une durée allongée':''}.`);
+alts.filter(([l,s],i)=>s.gainT<=0&&i!=ri).forEach(([l,s])=>tx4.push(`${l} : gain net de ${e0(s.gainT)}, le surcoût dépasse l'économie.`));
+alts.filter(([l,s])=>/^Réneg/.test(l)&&s.gainT>0).forEach(([l,s])=>tx4.push(`${l} : gain net de ${e0(s.gainT)} sans IRA. Elle ${s.gainT<b.gainT?'reste moins avantageuse que le rachat':'est plus avantageuse que le rachat'} mais mérite d'être demandée.`));
+bl(tx4.slice(0,5),M,y,W-2*M,9,2.4);
+// 5
+sl(5,'Recommandation');fl(vc,M,30,170,30,2.5);ft('bold',14.5);col(WH);const hl=v[0]=='ok'?`Nous recommandons le rachat : nouveau prêt de ${eur(b.P)} sur ${b.d} mois à ${pc(b.rate)}`:v[0]=='wa'?'Rachat envisageable, à nuancer selon votre horizon de détention':'Nous ne recommandons pas le rachat dans ces conditions';doc.text(doc.splitTextToSize(pt(hl),160),M+5,39);ft('normal',9.5);doc.text(doc.splitTextToSize(pt(v[2]),160),M+5,52);
+hd('Pourquoi',M,70);const w5=[b.gainM>0?`Mensualité réduite de ${eur(b.gainM)} (de ${eur(o0.tot)} à ${eur(b.tot)}), soit ${e0(b.gainM*12)} par an.`:`Mensualité de ${eur(o0.tot)} à ${eur(b.tot)} : pas de baisse.`,`Coût total restant de ${e0(O.cO)} contre ${e0(b.cost)} : ${b.gainT>=0?'économie':'perte'} nette de ${e0(Math.abs(b.gainT))}, IRA et frais de ${e0(b.costs)} déduits.`,b.tPM<0?'Point mort non atteint sur la durée du prêt.':b.tPM?`Point mort en ${b.tPM} mois (${pmD}) : au-delà, chaque mensualité est un gain net.`:'Rentable dès le premier mois.',`Taux effectif, assurance incluse : de ${pc(O.teg0)} à ${pc(b.teg)}.`];
+if(Z.rev>0)w5.push(`Taux d'effort de ${pc(eff(o0.tot))} à ${pc(eff(b.tot))} des revenus.`);if(rp.obj)w5.push(`Objectif du client : ${okS(b)?'atteint':'non atteint'} (${rp.obj}).`);
+const pa=v[0]=='ko'?alts.filter(([l,s])=>okS(s)&&s.gainT>0).sort((a,c)=>c[1].gainT-a[1].gainT)[0]:null;if(pa)w5.push(`Piste à privilégier : ${pa[0]} (gain net de ${e0(pa[1].gainT)}).`);bl(w5,M,77,170,9.5,2.6);hd('Points de vigilance',188,36);const vg=[];
+if(b.tPM>0)vg.push(`Un remboursement ou une revente avant ${b.tPM} mois ne rentabilise pas l'opération.`);
+vg.push(`Garantie de ${eur(Z.gar)} à valider avec le simulateur officiel de l'organisme de garantie${b.rs>0?' ; restitution de '+eur(b.rs)+' prise en compte '+(Z.rq=='fin'?'en fin de prêt':'au rachat'):''}.`);
+if(Z.emp.some(e=>e.an!=e.ao))vg.push('Assurance déléguée : la nouvelle banque doit accepter l\'équivalence des garanties.');
+vg.push('Taux, frais et IRA à confirmer par l\'offre ferme et le décompte de la banque actuelle.');
+y=bl(vg,188,43,97,8.8,2.4);
+if(rp.comm){hd('Commentaire du conseiller',188,y+5);ft('italic',8.8);col(TX);const L=doc.splitTextToSize(pt(rp.comm),97),mx=Math.max(1,Math.floor((H-24-(y+11))/3.8));doc.text(L.length>mx?[...L.slice(0,mx-1),L[mx-1].replace(/.{0,2}$/,'...')]:L,188,y+11)}
+ft('normal',7.5);col(MU);doc.text(doc.splitTextToSize(pt(`Établi le ${today}${rp.conseiller?' par '+rp.conseiller:''}${rp.cabinet?', '+rp.cabinet:''}. IRA = plus faible de ${nf(Z.iraPct)} % du CRD et de ${nf(Z.iraMois)} mois d'intérêts${Z.iraOn?'':' (non appliquées)'} ; point mort = mois où l'économie cumulée, nette des frais, devient positive ; simulation non contractuelle, seule l'offre de prêt fait foi.`),W-2*M),M,H-19);
+return doc}
+async function pdf(){const O=CUR;if(!O||O.err)return toast('Complétez d\'abord la simulation (onglet Données)');
+try{await lib(LJ)}catch(e){return toast(e.message)}
+let doc;try{doc=buildPdf(window.jspdf.jsPDF,O)}catch(e){console.error(e);return toast('Erreur de génération du PDF')}
+const blob=new Blob([doc.output('arraybuffer')],{type:'application/pdf'}),nm='Rapport-adequation-'+(S.rep.clients||S.rep.dossier||'dossier').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w-]+/g,'-').replace(/^-+|-+$/g,'')+'.pdf';let dl=null;try{dl=await claude.use('downloads')}catch(e){}
+if(dl){try{await dl.save({filename:nm,data:blob});toast('PDF enregistré')}catch(e){toast(e&&e.code=='declined'?'Téléchargement annulé':e&&e.code=='extension_not_enabled'?'PDF non disponible dans cette vue':'Téléchargement impossible : '+((e&&e.message)||''))}}else{doc.save(nm);toast('PDF généré')}}
+
+form();ctlInit();rapInit();tab('res');run();
+</script></body></html>
